@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Student</title>
+    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h3>Add New User</h3>
+        <hr />
+
+        <form action="/student/save" method="POST" id="frm">
+            <input
+                type="text"
+                name="name"
+                class="form-control col-4 mb-4"
+                placeholder="Enter Name"
+                id="name"
+                required
+            />
+            <input
+                type="email"
+                name="email"
+                class="form-control col-4 mb-4"
+                placeholder="Enter Email"
+                id="email"
+                required
+            />
+            <button type="submit" class="btn btn-primary col-2">Save</button>
+        </form>
+        <hr />
+        <a href="list-students.html">Back to list</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#frm").submit(function (event) {
+                event.preventDefault();
+
+                var name = $("#name").val();
+                var email = $("#email").val();
+
+                var user = {
+                    name: name,
+                    email: email
+                };
+
+                $.ajax({
+                    url: "http://localhost:8080/student/save",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(user),
+                    success: function () {
+                        alert("User created successfully");
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        alert("Error occurred while creating user");
+                    },
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

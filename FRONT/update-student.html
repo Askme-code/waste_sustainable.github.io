@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Student</title>
+    <!-- Add the Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h3 class="mb-4">Update User</h3>
+        <hr />
+
+        <!-- Replace the form action and method with your Spring Boot endpoint -->
+        <form id="studentForm">
+            <!-- CSRF Token: Replace with your Spring Boot implementation -->
+            <input type="hidden" id="_csrf" name="_csrf" value="${_csrf.token}" />
+            <!-- Include student ID as a hidden field if needed -->
+            <input type="hidden" id="studentId" name="studentId" value="1" /> <!-- Replace with the actual student ID -->
+            
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Enter Name"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Enter Email"
+                    required
+                />
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="message"
+                    name="message"
+                    placeholder="Enter Message"
+                    required
+                />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+
+        <hr />
+        <a href="list-students.html">Back to List</a>
+    </div>
+
+    <!-- Add the Bootstrap and jQuery scripts here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrR3jBXe5z5I5Cf6m5zVzq8pI6qzIStsbZg3S7kcBVfC7Oq/3FQ5C5CcNqc5Ooa1j" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#studentForm").submit(function (event) {
+                event.preventDefault();
+
+                var name = $("#name").val();
+                var email = $("#email").val();
+                var message = $("#message").val();
+                var studentId = $("#studentId").val(); // Include student ID if needed
+
+                var student = {
+                    name: name,
+                    email: email,
+                    message: message,
+                };
+
+                // Replace the URL with your Spring Boot endpoint for updating a student
+                $.ajax({
+                    url: `http://localhost:8080/students/update/${studentId}`, // Replace {Id} with the actual student ID
+                    type: "PUT", // Use PUT or PATCH for updating
+                    contentType: "application/json",
+                    data: JSON.stringify(student),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-CSRF-TOKEN', $("#_csrf").val());
+                    },
+                    success: function () {
+                        alert("Student updated successfully");
+                        window.location.href = 'list-students.html';
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        alert("Error occurred while updating student");
+                    },
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
